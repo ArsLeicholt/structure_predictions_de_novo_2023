@@ -1,0 +1,67 @@
+###  install all packags needed 
+
+if (!require("ggplot2")) {
+  install.packages("ggplot2", dependencies = TRUE)
+  library(ggplot2)
+}
+
+if (!require("RColorBrewer")) {
+  install.packages("RColorBrewer")
+  library(RColorBrewer)
+}
+
+if(!require(FSA)){
+  install.packages("FSA")
+  library(FSA)
+}
+
+if (!require(lme4)) {
+  install.packages("lme4")
+  library(lme4)
+}
+
+
+if (!require("tidyverse")) {
+  install.packages("tidyverse")
+  library(tidyverse)
+}
+
+if (!require(cowplot)) {
+  install.packages("cowplot")
+  library(cowplot)
+}
+
+if (!require(ggpol)) {
+  install.packages("ggpol")
+  library(ggpol)
+}
+
+if (!require(readr)) {
+  install.packages("readr")
+  library(readr)
+}
+
+### read in data, apply to csvs with data X for disorder predictions and plddt values and split by sequence for statistical tests
+ 
+df_all_X <- read_csv("PATH/TO/FILE")
+data_split_X <- split(df_all, f = df_all$Sequence)
+
+### plot data for all
+
+all_plot <- ggplot(data = df_all , aes(x = Sequence , y = Disorder, fill = Predictor)) +
+geom_boxplot() +
+geom_point(data=means, aes(x=Sequence, y=Disorder), position=position_dodge(width=.75), color="white")
+
+all_plot
+
+
+### Statistical tests for single sets of proteins (name xxx): Kruskal wallis test followed by Dunn test
+### in case of plddt replace Disorder by plddt
+
+kruskal.test(Disorder ~ Predictor ,data = data_split_X$xxx) 
+
+dunnTest(Disorder ~ Predictor ,data = data_split_X$xxx)
+
+
+
+
